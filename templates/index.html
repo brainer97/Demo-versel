@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+</head>
+<body>
+    <h1>Welcome to the ChatBot</h1>
+    <form id="chat-form">
+        <input type="text" id="message-input" placeholder="Type your message here...">
+        <button type="submit">Send</button>
+    </form>
+    <div id="response-container"></div>
+
+    <script>
+        document.getElementById("chat-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const message = document.getElementById("message-input").value;
+            const responseContainer = document.getElementById("response-container");
+            const response = await fetch("/api", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({message})
+            });
+            const responseData = await response.text();
+            responseContainer.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+            responseContainer.innerHTML += `<p><strong>Bot:</strong> ${responseData}</p>`;
+            document.getElementById("message-input").value = "";
+        });
+    </script>
+</body>
+</html>
